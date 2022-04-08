@@ -1,0 +1,24 @@
+select distinct c.company_code, c.founder,
+count(distinct l.Lead_manager_code),
+count(distinct s.Senior_manager_code),
+count(distinct m.Manager_code),
+count(distinct e.Employee_code) from Company as c 
+join Lead_Manager as l on c.company_code=l.company_code
+join Senior_Manager as s on l.company_code=s.company_code
+join Manager as m on s.company_code=m.company_code
+join Employee as e on m.company_code=e.company_code
+group by c.company_code, c.founder
+order by c.company_code
+
+
+select round(sqrt(power(max(LAT_N) - min(LAT_N), 2) + 
+power(max(LONG_W) - min(LONG_W), 2)), 4)
+FROM STATION;
+select w.id, p.age, w.coins_needed, w.power from Wands as w 
+join Wands_Property as p
+on w.code = p.code
+where w.coins_needed = (select min(coins_needed)
+                       from Wands w2 inner join Wands_Property p2 
+                       on w2.code = p2.code 
+                       where p2.is_evil = 0 and p.age = p2.age and w.power = w2.power)
+order by w.power desc, p.age desc;
